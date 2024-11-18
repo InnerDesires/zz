@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    font-family: ;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -65,4 +68,25 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+  font-family: 'UZ Sans';
+  src: url('/fonts/UZSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UZ Sans';
+  src: url('/fonts/UZSans-SemiBold.ttf') format('truetype');
+  font-weight: 600; /* Use the correct weight for SemiBold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'UZ Sans';
+  src: url('/fonts/UZSans-Bold.ttf') format('truetype');
+  font-weight: 700; /* Use the correct weight for Bold */
+  font-style: normal;
 }
