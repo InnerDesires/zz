@@ -41,7 +41,7 @@ export default function Navbar() {
 
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
+    React.ComponentPropsWithoutRef<"a"> & { href: string }
 >(({ className, title, children, ...props }, ref) => {
     return (
         <li>
@@ -52,6 +52,7 @@ const ListItem = React.forwardRef<
                         "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                         className
                     )}
+                    prefetch={true}
                     {...props}
                 >
                     <div className="text-sm font-medium leading-none">{title}</div>
@@ -80,6 +81,7 @@ function DesktopMenu() {
                             <Link
                                 className="flex h-full w-full select-none flex-col justify-end rounded-md bg-[url('/kids.jpg')] bg-cover bg-center p-6 no-underline outline-none focus:shadow-md relative"
                                 href="/"
+                                prefetch={true}
                             >
                                 <div className="absolute inset-0 bg-gradient-to-b to-black from-transparent rounded-md"></div>
                                 <div className="relative z-10">

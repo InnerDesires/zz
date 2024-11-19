@@ -1,6 +1,6 @@
 'use server'
 
-import { signOut } from "..auth/"
+import { signOut } from "next-auth/react"
 
 export async function handleSignOut() {
     await signOut()

@@ -1,14 +1,14 @@
 import { GeneratedAlways } from "kysely";
 import { AdapterAccountType } from "next-auth/adapters";
-
-export interface Database {
+import { Database as KyselyDatabase } from "@auth/kysely-adapter";
+export interface Database extends KyselyDatabase {
   User: {
     id: string;
-    name: string | null;
+    name: string | undefined;
     email: string;
     emailVerified: Date | null;
-    image: string | null;
-    hashed_password: string | null;
+    image: string | undefined;
+    hashed_password: string | undefined;
   };
   Account: {
     id: GeneratedAlways<string>;
@@ -16,13 +16,13 @@ export interface Database {
     type: AdapterAccountType;
     provider: string;
     providerAccountId: string;
-    refresh_token: string | null;
-    access_token: string | null;
+    refresh_token: string | undefined;
+    access_token: string | undefined;
     expires_at: number | undefined;
-    token_type: string | null;
-    scope: string | null;
-    id_token: string | null;
-    session_state: string | null;
+    token_type: Lowercase<string> | undefined;
+    scope: string | undefined;
+    id_token: string | undefined;
+    session_state: string | undefined;
   };
   Session: {
     id: GeneratedAlways<string>;

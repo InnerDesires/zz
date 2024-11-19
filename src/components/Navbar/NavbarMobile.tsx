@@ -1,14 +1,10 @@
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Button } from "@/components/ui/button";
 import { MenuIcon } from "lucide-react";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import components from "./constants";
@@ -35,6 +31,7 @@ export default function NavbarMobile() {
                                     {component.children.map((child) => (
                                         <li key={child.title}>
                                             <Link
+                                                prefetch={true}
                                                 href={child.href}
                                                 className="block p-3 rounded-md hover:bg-gray-200"
                                             >
