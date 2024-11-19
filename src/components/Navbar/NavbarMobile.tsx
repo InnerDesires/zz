@@ -13,6 +13,7 @@ import { MenuIcon } from "lucide-react";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import components from "./constants";
 import { NavigationMenuItem } from "@radix-ui/react-navigation-menu";
+import Link from "next/link";
 
 
 export default function NavbarMobile() {
@@ -33,12 +34,12 @@ export default function NavbarMobile() {
                                     <h3 className="font-bold">{component.title}</h3>
                                     {component.children.map((child) => (
                                         <li key={child.title}>
-                                            <a
+                                            <Link
                                                 href={child.href}
                                                 className="block p-3 rounded-md hover:bg-gray-200"
                                             >
                                                 {child.title}
-                                            </a>
+                                            </Link>
                                         </li>
                                     ))}
                                 </div>

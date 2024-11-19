@@ -18,26 +18,22 @@ import components from "./constants";
 import NavbarMobile from "./NavbarMobile"
 import { Button } from "../ui/button"
 import { usePathname } from "next/navigation"
+import { ModeToggle } from "../common/ModeToggle"
 
 export default function Navbar() {
     const pathname = usePathname();
     console.log(pathname)
     return (
         <NavigationMenu className='p-3 min-w-full justify-between'>
-            <NavigationMenuList >
+            <NavigationMenuList>
 
                 <NavbarMobile />
                 <DesktopMenu />
 
             </NavigationMenuList>
-            <div>
-                {/* <img
-                    src="/file.svg"
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full"
-                /> */}
-                {pathname !== "/login" ? <Link href="/login"><Button>Увійти</Button></Link> : <Link href="/register"><Button>Зареєструватися</Button></Link>}
-
+            <div className="flex items-center">
+                <ModeToggle />
+                {pathname !== "/login" ? <Link href="/login"><Button variant="outline">Увійти</Button></Link> : <Link href="/register"><Button variant="outline">Зареєструватися</Button></Link>}
             </div>
         </NavigationMenu>
     );
