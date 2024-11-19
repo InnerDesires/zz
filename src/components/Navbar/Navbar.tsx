@@ -34,8 +34,8 @@ export default function Navbar() {
 }
 
 const ListItem = React.forwardRef<
-    React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a">
+    React.ComponentRef<typeof Link>,
+    React.ComponentPropsWithoutRef<typeof Link>
 >(({ className, title, children, ...props }, ref) => {
     return (
         <li>
