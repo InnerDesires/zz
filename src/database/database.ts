@@ -7,7 +7,7 @@ import { Database } from "@/types/db_types";
 
 const dialect = new PostgresDialect({
     pool: new Pool({
-        connectionString: process.env.POSTGRES_URL,
+        connectionString: process.env.POSTGRES_URL_WORKAROUND,
         ssl: {
             rejectUnauthorized: false // Required for Supabase connections
         },
