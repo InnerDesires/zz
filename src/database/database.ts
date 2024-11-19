@@ -1,4 +1,3 @@
-
 import { Pool } from "pg";
 import { PostgresDialect } from "kysely";
 import { KyselyAuth } from "@auth/kysely-adapter";
@@ -8,12 +7,11 @@ import { Database } from "@/types/db_types";
 
 const dialect = new PostgresDialect({
     pool: new Pool({
-        database: "mydb",
-        host: "localhost",
-        user: "macsucks",
-        password: process.env.DB_PASSWORD,
-        port: 5432,
-        max: 10,
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+            rejectUnauthorized: false // Required for Supabase connections
+        },
+        max: 10
     }),
 });
 

@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-
 export default function Home() {
   return (
     <div style={{ padding: '20px', lineHeight: '1.6' }}>
@@ -25,15 +23,6 @@ export default function Home() {
         <h2 style={{ marginBottom: '10px' }}>Contact Us</h2>
         <p>Feel free to reach out to us at contact@example.com.</p>
       </section>
-      
-      <Image 
-        src="https://via.placeholder.com/150"
-        alt="Placeholder Image"
-        width={150}
-        height={150}
-        style={{ marginBottom: '20px' }}
-      />
-      
       <Button>Увійти</Button>
     </div>
   );
