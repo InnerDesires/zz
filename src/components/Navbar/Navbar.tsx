@@ -1,8 +1,5 @@
-"use client"
-
 import * as React from "react"
 import Link from "next/link"
-
 import { cn } from "@/lib/utils"
 import {
     NavigationMenu,
@@ -16,24 +13,21 @@ import {
 
 import components from "./constants";
 import NavbarMobile from "./NavbarMobile"
-import { Button } from "../ui/button"
-import { usePathname } from "next/navigation"
 import { ModeToggle } from "../common/ModeToggle"
+import ProfileAvatarHandler from "./ProfileAvatarHandler"
 
 export default function Navbar() {
-    const pathname = usePathname();
-    console.log(pathname)
     return (
         <NavigationMenu className='p-3 min-w-full justify-between'>
             <NavigationMenuList>
 
-                <NavbarMobile />
+                <NavbarMobile /> 
                 <DesktopMenu />
 
             </NavigationMenuList>
             <div className="flex items-center">
                 <ModeToggle />
-                {pathname !== "/login" ? <Link href="/login"><Button variant="outline">Увійти</Button></Link> : <Link href="/register"><Button variant="outline">Зареєструватися</Button></Link>}
+                <ProfileAvatarHandler />
             </div>
         </NavigationMenu>
     );
@@ -41,7 +35,7 @@ export default function Navbar() {
 
 const ListItem = React.forwardRef<
     React.ElementRef<"a">,
-    React.ComponentPropsWithoutRef<"a"> & { href: string }
+    React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
     return (
         <li>
@@ -52,7 +46,6 @@ const ListItem = React.forwardRef<
                         "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                         className
                     )}
-                    prefetch={true}
                     {...props}
                 >
                     <div className="text-sm font-medium leading-none">{title}</div>

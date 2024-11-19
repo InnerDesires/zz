@@ -6,10 +6,16 @@ import { useState } from "react";
 import { Facebook, Instagram } from 'lucide-react';
 import { Icons } from "@/components/icons";
 import Link from 'next/link';
+import { signIn, useSession } from "next-auth/react"
+import { redirect } from "next/navigation";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { data: session } = useSession();
+    if (session) {
+        redirect("/");
+    }
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -17,9 +23,19 @@ export default function Login() {
         console.log("Email:", email, "Password:", password);
     };
 
-    const handleOAuthLogin = (provider: string) => {
-        // Implement OAuth login logic here
-        console.log(`Logging in with ${provider}`);
+    const handleOAuthLogin = async (provider: string) => {
+        if (provider === 'Google') {
+            try {
+                await signIn('google', {
+                    callbackUrl: '/',  // Redirect after successful login
+                });
+            } catch (error) {
+                console.error('OAuth error:', error);
+            }
+        } else {
+            // Handle other providers
+            console.log(`Logging in with ${provider}`);
+        }
     };
 
     return (
@@ -66,7 +82,7 @@ export default function Login() {
                         </span>
                     </div>
                 </div>
-               
+
                 <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
