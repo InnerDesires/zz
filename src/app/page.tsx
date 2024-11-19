@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -25,7 +26,13 @@ export default function Home() {
         <p>Feel free to reach out to us at contact@example.com.</p>
       </section>
       
-      <img src="https://via.placeholder.com/150" alt="Placeholder Image" style={{ display: 'block', marginBottom: '20px' }} />
+      <Image 
+        src="https://via.placeholder.com/150"
+        alt="Placeholder Image"
+        width={150}
+        height={150}
+        style={{ marginBottom: '20px' }}
+      />
       
       <Button>Увійти</Button>
     </div>
