@@ -28,8 +28,13 @@ const dialect = new PostgresDialect({
         console.log("Attempting to connect...");
         await client.connect();
         console.log("Connected successfully!");
-    } catch (error) {
-        console.error("Connection failed:", error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Connection failed:", error.message);
+            console.error("Error type:", error.name); // Logs specific error type (e.g., ECONNREFUSED)
+        } else {
+            console.error("Unknown error occurred:", error);
+        }
     } finally {
         await client.end();
     }
