@@ -4,6 +4,7 @@ import { Database } from "@/types/db_types";
 export async function up(db: Kysely<Database>): Promise<void> {
   await db.schema
     .createTable("User")
+    .ifNotExists() // Add this line
     .addColumn("id", "uuid", (col) =>
       col.primaryKey().defaultTo(sql`gen_random_uuid()`)
     )
@@ -16,12 +17,12 @@ export async function up(db: Kysely<Database>): Promise<void> {
 
   await db.schema
     .createTable("Account")
+    .ifNotExists() // Add this line
     .addColumn("id", "uuid", (col) =>
       col.primaryKey().defaultTo(sql`gen_random_uuid()`)
     )
     .addColumn("userId", "uuid", (col) =>
-      col.references("User.id").onDelete("cascade").notNull()
-    )
+      col.references("User.id").onDelete("cascade").notNull())
     .addColumn("type", "text", (col) => col.notNull())
     .addColumn("provider", "text", (col) => col.notNull())
     .addColumn("providerAccountId", "text", (col) => col.notNull())
@@ -36,18 +37,19 @@ export async function up(db: Kysely<Database>): Promise<void> {
 
   await db.schema
     .createTable("Session")
+    .ifNotExists() // Add this line
     .addColumn("id", "uuid", (col) =>
       col.primaryKey().defaultTo(sql`gen_random_uuid()`)
     )
     .addColumn("userId", "uuid", (col) =>
-      col.references("User.id").onDelete("cascade").notNull()
-    )
-    .addColumn("sessionToken", "text", (col) => col.notNull().unique()) 
+      col.references("User.id").onDelete("cascade").notNull())
+    .addColumn("sessionToken", "text", (col) => col.notNull().unique())
     .addColumn("expires", "timestamptz", (col) => col.notNull())
     .execute();
 
   await db.schema
     .createTable("VerificationToken")
+    .ifNotExists() // Add this line
     .addColumn("identifier", "text", (col) => col.notNull())
     .addColumn("token", "text", (col) => col.notNull().unique())
     .addColumn("expires", "timestamptz", (col) => col.notNull())
@@ -55,12 +57,14 @@ export async function up(db: Kysely<Database>): Promise<void> {
 
   await db.schema
     .createIndex("Account_userId_index")
+    .ifNotExists() // Add this line
     .on("Account")
     .column("userId")
     .execute();
 
   await db.schema
     .createIndex("Session_userId_index")
+    .ifNotExists() // Add this line
     .on("Session")
     .column("userId")
     .execute();
