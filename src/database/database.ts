@@ -4,9 +4,7 @@ import { KyselyAuth } from "@auth/kysely-adapter";
 import { up } from "./migrations/001_create_db";
 import { Database } from "@/types/db_types";
 
-const connectionString = process.env.NODE_ENV === "production"
-    ? process.env.POSTGRES_PRISMA_URL
-    : process.env.POSTGRES_URL_WORKAROUND
+const connectionString = process.env.POSTGRES_URL
 console.log('Connection String:', connectionString)
 const dialect = new PostgresDialect({
     pool: new Pool({
