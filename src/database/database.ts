@@ -11,9 +11,6 @@ console.log('Connection String:', connectionString)
 const dialect = new PostgresDialect({
     pool: new Pool({
         connectionString: connectionString,
-        ssl: {
-            rejectUnauthorized: false, // Allows self-signed certificates
-        },
         max: 10,
     }),
 });
