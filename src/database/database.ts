@@ -4,14 +4,17 @@ import { KyselyAuth } from "@auth/kysely-adapter";
 import { up } from "./migrations/001_create_db";
 import { Database } from "@/types/db_types";
 
-
+const connectionString = process.env.NODE_ENV === "production"
+    ? process.env.POSTGRES_PRISMA_URL
+    : process.env.POSTGRES_URL_WORKAROUND
+console.log('Connection String:', connectionString)
 const dialect = new PostgresDialect({
     pool: new Pool({
-        connectionString: process.env.NODE_ENV === "production" ? process.env.POSTGRES_PRISMA_URL : process.env.POSTGRES_URL_WORKAROUND,
+        connectionString: connectionString,
         ssl: {
-            rejectUnauthorized: false // Required for Supabase connections
+            rejectUnauthorized: false, // Allows self-signed certificates
         },
-        max: 10
+        max: 10,
     }),
 });
 
