@@ -20,7 +20,7 @@ const dialect = new PostgresDialect({
 
 (async () => {
     const client = new Client({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: connectionString,
         ssl: { rejectUnauthorized: false },
     });
 
@@ -36,6 +36,7 @@ const dialect = new PostgresDialect({
             console.error("Unknown error occurred:", error);
         }
     } finally {
+        console.error("jumped to finally");
         await client.end();
     }
 })();
