@@ -17,10 +17,25 @@ export default function Login() {
         redirect("/");
     }
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log("Email:", email, "Password:", password);
+        try {
+            const result = await signIn('credentials', {
+                email,
+                password,
+                redirect: true,
+                callbackUrl: '/',
+            });
+            
+            console.log('Sign in result:', result);
+            
+            if (result?.error) {
+                console.error('Login failed:', result.error);
+            } 
+
+        } catch (error) {
+            console.error('Login error:', error);
+        }
     };
 
     const handleOAuthLogin = async (provider: string) => {
