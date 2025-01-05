@@ -73,6 +73,7 @@ export default function RegisterPage() {
         setError(data.message || 'Помилка реєстрації')
       }
     } catch (err) {
+      console.error('Register error:', err)
       setError('Щось пішло не так. Спробуйте ще раз.')
     }
   }
