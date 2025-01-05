@@ -1,6 +1,6 @@
 const components: { title: string, children: { title: string; href: string; description: string }[] }[] = [
     {
-        title: 'Розвивайся',
+        title: 'button1',
         children: [
             {
                 title: 'block1item1',
@@ -19,7 +19,7 @@ const components: { title: string, children: { title: string; href: string; desc
             }
         ]
     }, {
-        title: 'Будь в курсі',
+        title: 'button2',
         children: [
             {
                 title: "block2item1",
