@@ -30,9 +30,10 @@ export interface Database extends KyselyDatabase {
     sessionToken: string;
     expires: Date;
   };
-  VerificationToken: {
-    identifier: string;
+  PasswordResetToken: {
+    id: GeneratedAlways<number>;
     token: string;
-    expires: Date;
+    user_id: string;
+    expires_at: Date;
   };
 }

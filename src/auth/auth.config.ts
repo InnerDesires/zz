@@ -22,7 +22,7 @@ export const authConfig = {
                     throw new Error("Введіть email та пароль")
                 }
                 const user = await db.selectFrom('User')
-                    .where('email', '=', credentials.email)
+                    .where('email', '=', credentials.email as string)
                     .selectAll()
                     .executeTakeFirst()
                 console.log('User: ', user);

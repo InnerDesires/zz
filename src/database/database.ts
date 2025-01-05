@@ -17,5 +17,5 @@ export const db = new KyselyAuth<Database>({
 });
 
 up(db).then(() => {
-    console.log("Database created");
+    console.log('db up')
 });
