@@ -30,7 +30,7 @@ export default function NavbarMobile() {
                         <ul className="space-y-2 p-4">
                             {components.map((component) => (
                                 <div key={component.title}>
-                                    <h3 className="font-bold">{component.title}</h3>
+                                    <h3 className="font-bold">{t(component.title)}</h3>
                                     {component.children.map((child) => (
                                         <li key={child.title}>
                                             <Link
