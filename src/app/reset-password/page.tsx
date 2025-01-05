@@ -6,11 +6,13 @@ import { useState } from "react";
 import Link from 'next/link';
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { useTranslations } from 'next-intl';
 
 export default function ResetPassword() {
     const [email, setEmail] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
     const { data: session } = useSession();
+    const t = useTranslations('RequestReset');
 
     if (session) {
         redirect("/");
@@ -19,8 +21,6 @@ export default function ResetPassword() {
     const handleResetPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            // Here you would implement the actual password reset logic
-            // For example, calling your API endpoint
             const response = await fetch('/api/auth/reset-password', {
                 method: 'POST',
                 headers: {
@@ -42,17 +42,15 @@ export default function ResetPassword() {
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>Скидання паролю</CardTitle>
-                <CardDescription>
-                    Введіть вашу електронну адресу, і ми надішлемо вам інструкції щодо скидання паролю
-                </CardDescription>
+                <CardTitle>{t('title')}</CardTitle>
+                <CardDescription>{t('description')}</CardDescription>
             </CardHeader>
             <CardContent>
                 {!isSubmitted ? (
                     <form onSubmit={handleResetPassword} className="space-y-4">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                Email
+                                {t('email')}
                             </label>
                             <Input
                                 id="email"
@@ -61,25 +59,25 @@ export default function ResetPassword() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                                 className="mt-1 block w-full"
-                                placeholder="your@email.com"
+                                placeholder={t('emailPlaceholder')}
                             />
                         </div>
                         <Button type="submit" className="w-full">
-                            Скинути пароль
+                            {t('submit')}
                         </Button>
                     </form>
                 ) : (
                     <div className="text-center space-y-4">
                         <p className="text-green-600">
-                            Якщо вказана адреса існує в нашій системі, ви отримаєте email з інструкціями щодо скидання паролю.
+                            {t('successMessage')}
                         </p>
                         <p className="text-sm text-gray-500">
-                            Не отримали email? Перевірте папку спам або{" "}
+                            {t('noEmail')}{" "}
                             <button
                                 onClick={() => setIsSubmitted(false)}
                                 className="text-blue-500 hover:underline"
                             >
-                                спробуйте ще раз
+                                {t('tryAgain')}
                             </button>
                         </p>
                     </div>
@@ -87,9 +85,9 @@ export default function ResetPassword() {
             </CardContent>
             <CardFooter>
                 <p className="w-full text-sm text-center text-gray-500">
-                    Пам&apos;ятаєте свій пароль?{" "}
+                    {t('rememberPassword')}{" "}
                     <Link href="/login" className="text-blue-500 hover:underline">
-                        Увійти
+                        {t('signIn')}
                     </Link>
                 </p>
             </CardFooter>

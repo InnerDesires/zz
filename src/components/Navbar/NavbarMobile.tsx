@@ -10,9 +10,12 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import components from "./constants";
 import { NavigationMenuItem } from "@radix-ui/react-navigation-menu";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 
 export default function NavbarMobile() {
+    const t = useTranslations('Navbar');
+    
     return (
         <NavigationMenuItem className="block md:hidden">
             <Drawer>
@@ -20,7 +23,7 @@ export default function NavbarMobile() {
                 <DrawerContent>
                     <DrawerHeader >
                         <VisuallyHidden.Root asChild>
-                            <DrawerTitle>Навігація</DrawerTitle>
+                            <DrawerTitle>{t('button1')}</DrawerTitle>
                         </VisuallyHidden.Root>
                     </DrawerHeader>
                     <div>
@@ -35,7 +38,7 @@ export default function NavbarMobile() {
                                                 href={child.href}
                                                 className="block p-3 rounded-md hover:bg-gray-200"
                                             >
-                                                {child.title}
+                                                {t(child.title)}
                                             </Link>
                                         </li>
                                     ))}

@@ -8,11 +8,14 @@ import { Icons } from "@/components/icons";
 import Link from 'next/link';
 import { signIn, useSession } from "next-auth/react"
 import { redirect } from "next/navigation";
+import { useTranslations } from 'next-intl';
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { data: session } = useSession();
+    const t = useTranslations('Login');
+
     if (session) {
         redirect("/");
     }
@@ -56,8 +59,8 @@ export default function Login() {
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>Авторизація</CardTitle>
-                <CardDescription>Вітаємо на платформі для навчання та взаємодії учасників проекту Залізна Зміна</CardDescription>
+                <CardTitle>{t('title')}</CardTitle>
+                <CardDescription>{t('description')}</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="mb-4 space-y-2">
@@ -65,24 +68,21 @@ export default function Login() {
                         onClick={() => handleOAuthLogin('Google')}
                         className="w-full bg-[#EA4335] text-white hover:bg-[#EA4335]/80"
                     >
-
-                        Продовжити через Google
+                        {t('continueWith', { provider: 'Google' })}
                         <Icons.google />
                     </Button>
                     <Button
                         onClick={() => handleOAuthLogin('Facebook')}
                         className="w-full bg-[#3b5998] text-white hover:bg-[#3b5998]/80"
                     >
-
-                        Продовжити через Facebook
+                        {t('continueWith', { provider: 'Facebook' })}
                         <Facebook />
                     </Button>
                     <Button
                         onClick={() => handleOAuthLogin('Instagram')}
                         className="w-full bg-[#C13584] text-white hover:bg-[#833AB4]/80"
                     >
-
-                        Продовжити через Instagram
+                        {t('continueWith', { provider: 'Instagram' })}
                         <Instagram />
                     </Button>
                 </div>
@@ -93,7 +93,7 @@ export default function Login() {
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
                         <span className="bg-background px-2 text-muted-foreground">
-                            Або продовжити через email
+                            {t('orContinueWith')}
                         </span>
                     </div>
                 </div>
@@ -101,7 +101,7 @@ export default function Login() {
                 <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                            Email
+                            {t('email')}
                         </label>
                         <Input
                             id="email"
@@ -114,7 +114,7 @@ export default function Login() {
                     </div>
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                            Пароль
+                            {t('password')}
                         </label>
                         <Input
                             id="password"
@@ -126,17 +126,19 @@ export default function Login() {
                         />
                     </div>
                     <p className="text-sm text-gray-500">
-                        Забули пароль?
-                        <Link href="/reset-password" className="text-blue-500"> Скинути пароль</Link>
+                        {t('forgotPassword')}
+                        <Link href="/reset-password" className="text-blue-500"> {t('resetPassword')}</Link>
                     </p>
                     <Button type="submit" className="w-full">
-                        Авторизуватися
+                        {t('submit')}
                     </Button>
                 </form>
 
             </CardContent>
             <CardFooter>
-                <p className="w-full text-sm text-center text-gray-500"><Link href="/register" className="text-blue-500">Реєстрація через email та пароль</Link></p>
+                <p className="w-full text-sm text-center text-gray-500">
+                    <Link href="/register" className="text-blue-500">{t('registerWithEmail')}</Link>
+                </p>
             </CardFooter>
         </Card>
     );

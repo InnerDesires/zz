@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
+import { useTranslations } from 'next-intl';
 
 interface ResetPasswordFormProps {
     token: string;
@@ -16,13 +17,14 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
     const [error, setError] = useState("");
     const [isSubmitted, setIsSubmitted] = useState(false);
     const router = useRouter();
+    const t = useTranslations('ResetPassword');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
         if (password !== confirmPassword) {
-            setError("Паролі не співпадають");
+            setError("passwordMismatch");
             return;
         }
 
@@ -46,71 +48,68 @@ export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
                     router.push('/login');
                 }, 3000);
             } else {
-                setError(data.error || "Помилка при скиданні паролю");
+                setError(data.error || "generic");
             }
         } catch (error) {
             console.error('Reset password error:', error);
-            setError("Щось пішло не так. Спробуйте ще раз.");
+            setError("generic");
         }
     };
 
-    // Rest of your component JSX remains the same, just update the form logic to use the token prop
     return (
         <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-            <CardTitle>Встановіть новий пароль</CardTitle>
-            <CardDescription>
-                Будь ласка, введіть новий пароль
-            </CardDescription>
-        </CardHeader>
-        <CardContent>
-            {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                            Новий пароль
-                        </label>
-                        <Input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className="mt-1 block w-full"
-                        />
+            <CardHeader>
+                <CardTitle>{t('title')}</CardTitle>
+                <CardDescription>{t('description')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+                {!isSubmitted ? (
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                {t('newPassword')}
+                            </label>
+                            <Input
+                                id="password"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="mt-1 block w-full"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                                {t('confirmPassword')}
+                            </label>
+                            <Input
+                                id="confirmPassword"
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                                className="mt-1 block w-full"
+                            />
+                        </div>
+                        {error && (
+                            <p className="text-red-500 text-sm">{t(`errors.${error}`)}</p>
+                        )}
+                        <Button type="submit" className="w-full">
+                            {t('submit')}
+                        </Button>
+                    </form>
+                ) : (
+                    <div className="text-center space-y-4">
+                        <p className="text-green-600">
+                            {t('success')}
+                        </p>
                     </div>
-                    <div>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                            Підтвердіть пароль
-                        </label>
-                        <Input
-                            id="confirmPassword"
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                            className="mt-1 block w-full"
-                        />
-                    </div>
-                    {error && (
-                        <p className="text-red-500 text-sm">{error}</p>
-                    )}
-                    <Button type="submit" className="w-full">
-                        Зберегти новий пароль
-                    </Button>
-                </form>
-            ) : (
-                <div className="text-center space-y-4">
-                    <p className="text-green-600">
-                        Пароль успішно змінено! Зараз вас буде перенаправлено на сторінку входу.
-                    </p>
-                </div>
-            )}
-        </CardContent>
-        <CardFooter>
-            <p className="w-full text-sm text-center text-gray-500">
-                <Link href="/login" className="text-blue-500 hover:underline">
-                    Повернутися до входу
+                )}
+            </CardContent>
+            <CardFooter>
+                <p className="w-full text-sm text-center text-gray-500">
+                    <Link href="/login" className="text-blue-500 hover:underline">
+                        {t('backToLogin')}
                     </Link>
                 </p>
             </CardFooter>

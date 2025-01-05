@@ -3,38 +3,38 @@ const components: { title: string, children: { title: string; href: string; desc
         title: 'Розвивайся',
         children: [
             {
-                title: "Категорії навчальних Курсів",
+                title: 'block1item1',
                 href: "/",
-                description: "Оберіть категорію, яка вас цікавить",
+                description: 'block1item1description',
             },
             {
-                title: "Останні додані курси",
+                title: "block1item2",
                 href: "/",
-                description: "Перегляньте що додали останнім часом",
+                description: "block1item2description",
             },
             {
-                title: "Мої Курси",
+                title: "block1item3",
                 href: "/",
-                description: "Перегляньте ваші досягнення та прогрес",
+                description: "block1item3description",
             }
         ]
     }, {
         title: 'Будь в курсі',
         children: [
             {
-                title: "Новини",
+                title: "block2item1",
                 href: "/",
-                description: "Перегляньте останні новини",
+                description: "block2item1description",
             },
             {
-                title: "Події",
+                title: "block2item2",
                 href: "/",
-                description: "Перегляньте останні події",
+                description: "block2item2description",
             },
             {
-                title: "Інше",
+                title: "block2item3",
                 href: "/",
-                description: "Перегляньте останні новини",
+                description: "block2item3description",
             }
         ]
     }

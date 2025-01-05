@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
@@ -13,9 +14,10 @@ import {
 export default function ProfileAvatarHandler() {
     const { data: session } = useSession();
     const pathname = usePathname();
+    const t = useTranslations('Auth');
 
-    if (!session && pathname !== "/login") return <LoginButton />
-    if (!session && pathname == "/login") return <RegisterButton />
+    if (!session && pathname !== "/login") return <LoginButton />;
+    if (!session && pathname == "/login") return <RegisterButton />;
 
     return (
         <Popover>
@@ -28,27 +30,29 @@ export default function ProfileAvatarHandler() {
                 </Avatar>
             </PopoverTrigger>
             <PopoverContent>
-            <div className="flex flex-col gap-2">
-                <Link href="/profile" className="hover:bg-muted px-3 py-2 rounded-md">
-                    Профіль
-                </Link>
-                <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => signOut()}
-                >
-                    Вийти
-                </Button>
-            </div>
-        </PopoverContent>
-        </Popover >
+                <div className="flex flex-col gap-2">
+                    <Link href="/profile" className="hover:bg-muted px-3 py-2 rounded-md">
+                        {t('profile')}
+                    </Link>
+                    <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => signOut()}
+                    >
+                        {t('signOut')}
+                    </Button>
+                </div>
+            </PopoverContent>
+        </Popover>
     );
 }
 
 const LoginButton = () => {
-    return <Link href="/login"><Button variant="outline">Увійти</Button></Link>;
+    const t = useTranslations('Auth');
+    return <Link href="/login"><Button variant="outline">{t('signIn')}</Button></Link>;
 }
 
 const RegisterButton = () => {
-    return <Link href="/register"><Button variant="outline">Зареєструватися</Button></Link>;
+    const t = useTranslations('Auth');
+    return <Link href="/register"><Button variant="outline">{t('register')}</Button></Link>;
 }

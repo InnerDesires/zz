@@ -1,0 +1,81 @@
+{
+    "Navbar": {
+        "button1": "Grow",
+        "button2": "Stay in the loop",
+        "button3": "Learn more about us",
+        "block1Header": "Learning platform for the Iron Squad",
+        "block1HeaderDescription": "Best learning materials for your development",
+        "block1item1": "Categories of learning courses",
+        "block1item1description": "Choose the category that interests you",
+        "block1item2": "Latest added courses",
+        "block1item2description": "View what was added recently",
+        "block1item3": "My Courses",
+        "block1item3description": "View your achievements and progress",
+        "block2item1": "News",
+        "block2item1description": "View the latest news",
+        "block2item2": "Events",
+        "block2item2description": "View the latest events",
+        "block2item3": "Other",
+        "block2item3description": "View the latest news"
+    },
+    "Auth": {
+        "signIn": "Sign In",
+        "register": "Register",
+        "signOut": "Sign Out",
+        "profile": "Profile"
+    },
+    "Register": {
+        "title": "Register",
+        "description": "Create an account to access the Iron Squad platform",
+        "continueWith": "Continue with {provider}",
+        "orRegisterWith": "Or register with email",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "submit": "Register",
+        "haveAccount": "Already have an account?",
+        "signIn": "Sign In",
+        "errors": {
+            "passwordMismatch": "Passwords do not match",
+            "generic": "Something went wrong. Please try again."
+        }
+    },
+    "Login": {
+        "title": "Sign In",
+        "description": "Welcome to the Iron Squad learning and interaction platform",
+        "continueWith": "Continue with {provider}",
+        "orContinueWith": "Or continue with email",
+        "email": "Email",
+        "password": "Password",
+        "forgotPassword": "Forgot password?",
+        "resetPassword": "Reset password",
+        "submit": "Sign In",
+        "registerWithEmail": "Register with email and password"
+    },
+    "ResetPassword": {
+        "title": "Set New Password",
+        "description": "Please enter your new password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm Password",
+        "submit": "Save New Password",
+        "success": "Password successfully changed! You will be redirected to the login page.",
+        "backToLogin": "Back to Login",
+        "errors": {
+            "passwordMismatch": "Passwords do not match",
+            "generic": "Something went wrong. Please try again.",
+            "invalidToken": "Invalid or expired password reset link"
+        }
+    },
+    "RequestReset": {
+        "title": "Reset Password",
+        "description": "Enter your email address and we will send you instructions to reset your password",
+        "email": "Email",
+        "emailPlaceholder": "your@email.com",
+        "submit": "Reset Password",
+        "successMessage": "If this email exists in our system, you will receive password reset instructions.",
+        "noEmail": "Haven't received the email? Check your spam folder or",
+        "tryAgain": "try again",
+        "rememberPassword": "Remember your password?",
+        "signIn": "Sign In"
+    }
+}
