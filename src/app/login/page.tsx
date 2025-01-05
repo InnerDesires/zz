@@ -74,6 +74,7 @@ export default function Login() {
                     <Button
                         onClick={() => handleOAuthLogin('Facebook')}
                         className="w-full bg-[#3b5998] text-white hover:bg-[#3b5998]/80"
+                        disabled={true}
                     >
                         {t('continueWith', { provider: 'Facebook' })}
                         <Facebook />
@@ -81,6 +82,7 @@ export default function Login() {
                     <Button
                         onClick={() => handleOAuthLogin('Instagram')}
                         className="w-full bg-[#C13584] text-white hover:bg-[#833AB4]/80"
+                        disabled={true}
                     >
                         {t('continueWith', { provider: 'Instagram' })}
                         <Instagram />
