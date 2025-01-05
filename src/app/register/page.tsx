@@ -16,7 +16,7 @@ export default function RegisterPage() {
   const router = useRouter()
   const { data: session } = useSession()
   const t = useTranslations('Register')
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -95,7 +95,7 @@ export default function RegisterPage() {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle>{t('title')}</CardTitle>
+        <CardTitle className="text-3xl font-bold">{t('title')}</CardTitle>
         <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
