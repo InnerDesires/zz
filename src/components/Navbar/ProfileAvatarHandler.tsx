@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession, signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -10,22 +9,23 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "../ui/popover"
+import { useAuth } from '@/contexts/auth-context';
 
 export default function ProfileAvatarHandler() {
-    const { data: session } = useSession();
+    const { user, logout } = useAuth();
     const pathname = usePathname();
     const t = useTranslations('Auth');
 
-    if (!session && pathname !== "/login") return <LoginButton />;
-    if (!session && pathname == "/login") return <RegisterButton />;
+    if (!user && pathname !== "/login") return <LoginButton />;
+    if (!user && pathname === "/login") return <RegisterButton />;
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <Avatar className='cursor-pointer ml-2'>
-                    <AvatarImage src={session?.user?.image as string} />
+                    <AvatarImage src={user?.image} />
                     <AvatarFallback>
-                        {session?.user?.email?.charAt(0)}
+                        {user?.email?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
             </PopoverTrigger>
@@ -37,7 +37,7 @@ export default function ProfileAvatarHandler() {
                     <Button
                         variant="ghost"
                         className="w-full justify-start"
-                        onClick={() => signOut()}
+                        onClick={logout}
                     >
                         {t('signOut')}
                     </Button>
