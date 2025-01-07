@@ -9,13 +9,12 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Facebook, Instagram } from 'lucide-react'
 import { Icons } from "@/components/icons"
-import { signIn, useSession } from "next-auth/react"
-import { redirect } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 
 export default function RegisterPage() {
   const router = useRouter()
-  const { data: session } = useSession()
   const t = useTranslations('Register')
+  const { register, user } = useAuth()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -23,9 +22,11 @@ export default function RegisterPage() {
     confirmPassword: ''
   })
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  if (session) {
-    redirect("/")
+  if (user) {
+    router.push("/")
+    return null
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,57 +40,26 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
+    setIsLoading(true)
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Паролі не співпадають')
+      setError(t('errors.passwordMismatch'))
+      setIsLoading(false)
       return
     }
 
     try {
-      // First, create the user account using the correct API route
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-
-      if (res.ok) {
-        // If registration is successful, sign in the user using signIn
-        const result = await signIn('credentials', {
-          email: formData.email,
-          password: formData.password,
-          redirect: false,
-        })
-
-        if (result?.error) {
-          setError(result.error)
-        } else {
-          router.push('/')
-        }
-      } else {
-        const data = await res.json()
-        setError(data.message || 'Помилка реєстрації')
-      }
+      await register(formData.email, formData.password)
+      router.push('/')
     } catch (err) {
-      console.error('Register error:', err)
-      setError('Щось пішло не так. Спробуйте ще раз.')
+      setError(err instanceof Error ? err.message : t('errors.generic'))
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleOAuthSignIn = async (provider: string) => {
-    try {
-      await signIn(provider.toLowerCase(), {
-        callbackUrl: '/',
-      })
-    } catch (error) {
-      console.error('OAuth error:', error)
-      setError('Помилка автентифікації через соціальну мережу')
-    }
+    setError(`${provider} registration is not configured yet`)
   }
 
   return (
@@ -103,6 +73,7 @@ export default function RegisterPage() {
           <Button
             onClick={() => handleOAuthSignIn('Google')}
             className="w-full bg-[#EA4335] text-white hover:bg-[#EA4335]/80"
+            disabled={isLoading}
           >
             {t('continueWith', { provider: 'Google' })}
             <Icons.google />
@@ -110,6 +81,7 @@ export default function RegisterPage() {
           <Button
             onClick={() => handleOAuthSignIn('Facebook')}
             className="w-full bg-[#3b5998] text-white hover:bg-[#3b5998]/80"
+            disabled={isLoading}
           >
             {t('continueWith', { provider: 'Facebook' })}
             <Facebook />
@@ -117,6 +89,7 @@ export default function RegisterPage() {
           <Button
             onClick={() => handleOAuthSignIn('Instagram')}
             className="w-full bg-[#C13584] text-white hover:bg-[#833AB4]/80"
+            disabled={isLoading}
           >
             {t('continueWith', { provider: 'Instagram' })}
             <Instagram />
@@ -135,8 +108,8 @@ export default function RegisterPage() {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 text-sm text-red-500 bg-red-100 rounded">
-            {t(`errors.${error}`) || error}
+          <div className="mb-4 p-2 text-sm text-red-500 bg-red-50 rounded">
+            {error}
           </div>
         )}
 
@@ -153,6 +126,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               className="mt-1 block w-full"
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -167,6 +141,7 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               className="mt-1 block w-full"
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -181,10 +156,11 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               className="mt-1 block w-full"
+              disabled={isLoading}
             />
           </div>
-          <Button type="submit" className="w-full">
-            {t('submit')}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? 'Loading...' : t('submit')}
           </Button>
         </form>
       </CardContent>

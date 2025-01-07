@@ -6,112 +6,127 @@ import { useState } from "react";
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { useTranslations } from 'next-intl';
+import { strapiAuth } from "@/services/strapi-auth";
 
 interface ResetPasswordFormProps {
     token: string;
 }
 
 export default function ResetPasswordForm({ token }: ResetPasswordFormProps) {
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [formData, setFormData] = useState({
+        password: '',
+        confirmPassword: ''
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isSuccess, setIsSuccess] = useState(false);
     const router = useRouter();
     const t = useTranslations('ResetPassword');
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
+        setError(null);
+        setIsLoading(true);
 
-        if (password !== confirmPassword) {
-            setError("passwordMismatch");
+        if (formData.password !== formData.confirmPassword) {
+            setError(t('errors.passwordMismatch'));
+            setIsLoading(false);
             return;
         }
 
         try {
-            const response = await fetch('/api/auth/reset-password/confirm', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    token,
-                    password,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                setIsSubmitted(true);
-                setTimeout(() => {
-                    router.push('/login');
-                }, 3000);
-            } else {
-                setError(data.error || "generic");
-            }
-        } catch (error) {
-            console.error('Reset password error:', error);
-            setError("generic");
+            await strapiAuth.resetPassword(
+                token,
+                formData.password,
+                formData.confirmPassword
+            );
+            setIsSuccess(true);
+            setTimeout(() => {
+                router.push('/login');
+            }, 3000);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : t('errors.generic'));
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    if (isSuccess) {
+        return (
+            <Card className="w-full max-w-md mx-auto">
+                <CardContent className="pt-6">
+                    <div className="text-center space-y-4">
+                        <p className="text-green-600">{t('success')}</p>
+                        <Link href="/login" className="text-blue-500">
+                            {t('backToLogin')}
+                        </Link>
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <Card className="w-full max-w-md mx-auto">
             <CardHeader>
-                <CardTitle>{t('title')}</CardTitle>
+                <CardTitle className="text-3xl font-bold">{t('title')}</CardTitle>
                 <CardDescription>{t('description')}</CardDescription>
             </CardHeader>
             <CardContent>
-                {!isSubmitted ? (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                {t('newPassword')}
-                            </label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="mt-1 block w-full"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                                {t('confirmPassword')}
-                            </label>
-                            <Input
-                                id="confirmPassword"
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                className="mt-1 block w-full"
-                            />
-                        </div>
-                        {error && (
-                            <p className="text-red-500 text-sm">{t(`errors.${error}`)}</p>
-                        )}
-                        <Button type="submit" className="w-full">
-                            {t('submit')}
-                        </Button>
-                    </form>
-                ) : (
-                    <div className="text-center space-y-4">
-                        <p className="text-green-600">
-                            {t('success')}
-                        </p>
+                {error && (
+                    <div className="mb-4 p-2 text-sm text-red-500 bg-red-50 rounded">
+                        {error}
                     </div>
                 )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                            {t('newPassword')}
+                        </label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full"
+                            disabled={isLoading}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                            {t('confirmPassword')}
+                        </label>
+                        <Input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full"
+                            disabled={isLoading}
+                        />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? 'Loading...' : t('submit')}
+                    </Button>
+                </form>
             </CardContent>
             <CardFooter>
-                <p className="w-full text-sm text-center text-gray-500">
-                    <Link href="/login" className="text-blue-500 hover:underline">
-                        {t('backToLogin')}
-                    </Link>
-                </p>
+                <Link href="/login" className="w-full text-sm text-center text-blue-500">
+                    {t('backToLogin')}
+                </Link>
             </CardFooter>
         </Card>
     );

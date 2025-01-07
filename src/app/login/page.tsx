@@ -6,54 +6,42 @@ import { useState } from "react";
 import { Facebook, Instagram } from 'lucide-react';
 import { Icons } from "@/components/icons";
 import Link from 'next/link';
-import { signIn, useSession } from "next-auth/react"
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTranslations } from 'next-intl';
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { data: session } = useSession();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
     const t = useTranslations('Login');
+    const { login, user } = useAuth();
 
-    if (session) {
-        redirect("/");
+    if (user) {
+        router.push("/");
+        return null;
     }
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            const result = await signIn('credentials', {
-                email,
-                password,
-                redirect: true,
-                callbackUrl: '/',
-            });
-            
-            console.log('Sign in result:', result);
-            
-            if (result?.error) {
-                console.error('Login failed:', result.error);
-            } 
+        setIsLoading(true);
+        setError(null);
 
-        } catch (error) {
-            console.error('Login error:', error);
+        try {
+            await login(email, password);
+            router.push('/');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Login failed');
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    // For now, we'll disable OAuth logins since they need to be configured in Strapi first
     const handleOAuthLogin = async (provider: string) => {
-        if (provider === 'Google') {
-            try {
-                await signIn('google', {
-                    callbackUrl: '/',  // Redirect after successful login
-                });
-            } catch (error) {
-                console.error('OAuth error:', error);
-            }
-        } else {
-            // Handle other providers
-            console.log(`Logging in with ${provider}`);
-        }
+        setError(`${provider} login is not configured yet`);
     };
 
     return (
@@ -67,6 +55,7 @@ export default function Login() {
                     <Button
                         onClick={() => handleOAuthLogin('Google')}
                         className="w-full bg-[#EA4335] text-white hover:bg-[#EA4335]/80"
+                        disabled={isLoading}
                     >
                         {t('continueWith', { provider: 'Google' })}
                         <Icons.google />
@@ -74,6 +63,7 @@ export default function Login() {
                     <Button
                         onClick={() => handleOAuthLogin('Facebook')}
                         className="w-full bg-[#3b5998] text-white hover:bg-[#3b5998]/80"
+                        disabled={isLoading}
                     >
                         {t('continueWith', { provider: 'Facebook' })}
                         <Facebook />
@@ -81,6 +71,7 @@ export default function Login() {
                     <Button
                         onClick={() => handleOAuthLogin('Instagram')}
                         className="w-full bg-[#C13584] text-white hover:bg-[#833AB4]/80"
+                        disabled={isLoading}
                     >
                         {t('continueWith', { provider: 'Instagram' })}
                         <Instagram />
@@ -98,6 +89,12 @@ export default function Login() {
                     </div>
                 </div>
 
+                {error && (
+                    <div className="mb-4 p-2 text-sm text-red-500 bg-red-50 rounded">
+                        {error}
+                    </div>
+                )}
+
                 <form onSubmit={handleLogin} className="space-y-4">
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -110,6 +107,7 @@ export default function Login() {
                             onChange={(e) => setEmail(e.target.value)}
                             required
                             className="mt-1 block w-full"
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
@@ -123,17 +121,17 @@ export default function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             className="mt-1 block w-full"
+                            disabled={isLoading}
                         />
                     </div>
                     <p className="text-sm text-gray-500">
                         {t('forgotPassword')}
                         <Link href="/reset-password" className="text-blue-500"> {t('resetPassword')}</Link>
                     </p>
-                    <Button type="submit" className="w-full">
-                        {t('submit')}
+                    <Button type="submit" className="w-full" disabled={isLoading}>
+                        {isLoading ? 'Loading...' : t('submit')}
                     </Button>
                 </form>
-
             </CardContent>
             <CardFooter>
                 <p className="w-full text-sm text-center text-gray-500">
