@@ -13,12 +13,24 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Languages } from "lucide-react"
 import { Locale } from '@/i18n/config';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
-const locales = {
-    'en': 'English',
-    'uk-UA': 'Українська'
-} as const;
+const locales: Record<Locale, { label: string; flag: string }> = {
+    'en': {
+        label: 'English',
+        flag: '🇬🇧'
+    },
+    'uk-UA': {
+        label: 'Українська',
+        flag: '🇺🇦'
+    }
+};
 
 export default function LanguageSwitcher() {
     const router = useRouter();
@@ -26,6 +38,7 @@ export default function LanguageSwitcher() {
     const pathname = usePathname();
     const params = useParams();
     const currentLocale = useLocale();
+    const t = useTranslations('LanguageSelect');
 
     const onSelectChange = useMemo(() => (nextLocale: Locale) => {
         startTransition(() => {
@@ -41,29 +54,39 @@ export default function LanguageSwitcher() {
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button 
-                    variant="ghost" 
-                    size="icon"
-                    className={clsx(
-                        'hover:bg-accent hover:text-accent-foreground',
-                        isPending && 'transition-opacity [&:disabled]:opacity-30'
-                    )}
-                    disabled={isPending}
-                >
-                    <Languages className="h-[1.2rem] w-[1.2rem]" />
-                </Button>
-            </DropdownMenuTrigger>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className={clsx(
+                                    'hover:bg-accent hover:text-accent-foreground',
+                                    isPending && 'transition-opacity [&:disabled]:opacity-30'
+                                )}
+                                disabled={isPending}
+                            >
+                                <Languages className="h-[1.2rem] w-[1.2rem]" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p className="text-sm font-medium">{t('tooltip')}</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
             <DropdownMenuContent align="end">
-                {Object.entries(locales).map(([locale, label]) => (
+                {Object.entries(locales).map(([locale, { label, flag }]) => (
                     <DropdownMenuItem
                         key={locale}
                         onClick={() => onSelectChange(locale as Locale)}
                         className={clsx(
-                            'cursor-pointer',
-                            currentLocale === locale && 'bg-accent'
+                            'cursor-pointer flex items-center gap-2',
+                            currentLocale === locale && 'font-bold'
                         )}
                     >
+                        <span className="text-base">{flag}</span>
                         {label}
                     </DropdownMenuItem>
                 ))}
