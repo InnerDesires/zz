@@ -37,7 +37,7 @@ async function getTranslationsFromStrapi() {
 const getCachedTranslations = unstable_cache(
     async () => getTranslationsFromStrapi(),
     ['translations'],
-    { revalidate: 3600, tags: ['translations'] }
+    { revalidate: 30, tags: ['translations'] }
 );
 
 export async function fetchTranslations(locale: string): Promise<AbstractIntlMessages> {
