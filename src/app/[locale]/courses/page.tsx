@@ -7,12 +7,10 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 import CourseCardWrapper from "@/components/CourseCardWrapper";
-import CategoryCard from "@/components/CategoryCard";
-import CategoryCardWrapper from "@/components/CategoryCardWrapper";
+import Categories from "./components/categories";
 
 export default function CoursesPage() {
     const t = useTranslations('Courses');
-
     return (
         <div className="container mx-auto py-8 space-y-12">
             <div className="flex flex-col gap-4">
@@ -21,24 +19,7 @@ export default function CoursesPage() {
             </div>
             <section id="categories">
                 <h2 className="text-3xl font-bold mb-6">{t('categories')}</h2>
-                <Carousel className="w-full">
-                    <CarouselContent>
-                        {[1, 2, 3, 4, 5].map((_, index) => (
-                            <CarouselItem key={index} className="md:basis-1/3 lg:basis-1/4">
-                                <CategoryCardWrapper href={`/courses/category/${index + 1}`}>
-                                    <CategoryCard
-                                        name="UI/UX Design"
-                                        totalCourses={12}
-                                        completedCourses={5}
-                                        thumbnailSeed={index}
-                                    />
-                                </CategoryCardWrapper>
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
+                <Categories />
             </section>
 
             {/* New Courses Section */}
